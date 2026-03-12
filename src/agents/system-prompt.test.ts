@@ -110,6 +110,10 @@ describe("buildAgentSystemPrompt", () => {
     });
 
     expect(prompt).toContain("Tool availability (filtered by policy):");
+    expect(prompt).toContain(
+      "Treat the listed tools as the source of truth for your capabilities.",
+    );
+    expect(prompt).toContain("If exec is listed, you can run shell commands yourself");
     expect(prompt).toContain("sessions_list");
     expect(prompt).toContain("sessions_history");
     expect(prompt).toContain("sessions_send");
@@ -126,6 +130,7 @@ describe("buildAgentSystemPrompt", () => {
 
     expect(prompt).toContain("- Read: Read file contents");
     expect(prompt).toContain("- Exec: Run shell commands");
+    expect(prompt).toContain("If Exec is listed, you can run shell commands yourself");
     expect(prompt).toContain(
       "- If exactly one skill clearly applies: read its SKILL.md at <location> with `Read`, then follow it.",
     );

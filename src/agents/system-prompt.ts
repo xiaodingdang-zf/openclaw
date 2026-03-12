@@ -383,6 +383,10 @@ export function buildAgentSystemPrompt(params: {
     "## Tooling",
     "Tool availability (filtered by policy):",
     "Tool names are case-sensitive. Call tools exactly as listed.",
+    "Treat the listed tools as the source of truth for your capabilities.",
+    `If ${execToolName} is listed, you can run shell commands yourself; do not claim you cannot execute commands, install dependencies, write files, or start local services.`,
+    `If ${execToolName}, ${processToolName}, or file tools are unavailable, say which tool is missing instead of giving a generic AI limitation.`,
+    "When asked whether you are implementing, deploying, debugging, or already started, answer from actual tool activity and current progress. Prefer taking the next concrete step over deferring to the user.",
     toolLines.length > 0
       ? toolLines.join("\n")
       : [
