@@ -173,7 +173,10 @@ async function resolveMemoryStatusSnapshot(params: {
   }
   try {
     await manager.probeVectorAvailability();
-  } catch {}
+  } catch (probeErr) {
+    // Non-fatal: vector availability probe can fail without affecting status display.
+    void probeErr;
+  }
   const status = manager.status();
   await manager.close?.().catch(() => {});
   return { agentId, ...status };

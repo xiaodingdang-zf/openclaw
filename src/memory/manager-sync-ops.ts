@@ -318,7 +318,9 @@ export abstract class MemoryManagerSyncOps {
     } catch (err) {
       try {
         this.db.exec("ROLLBACK");
-      } catch {}
+      } catch (rollbackErr) {
+        log.debug(`ROLLBACK failed during error recovery: ${String(rollbackErr)}`);
+      }
       throw err;
     }
   }
@@ -738,14 +740,18 @@ export abstract class MemoryManagerSyncOps {
             `DELETE FROM ${VECTOR_TABLE} WHERE id IN (SELECT id FROM chunks WHERE path = ? AND source = ?)`,
           )
           .run(stale.path, "memory");
-      } catch {}
+      } catch (vecErr) {
+        log.debug(`failed to delete stale memory vectors for ${stale.path}: ${String(vecErr)}`);
+      }
       this.db.prepare(`DELETE FROM chunks WHERE path = ? AND source = ?`).run(stale.path, "memory");
       if (this.fts.enabled && this.fts.available) {
         try {
           this.db
             .prepare(`DELETE FROM ${FTS_TABLE} WHERE path = ? AND source = ? AND model = ?`)
             .run(stale.path, "memory", this.provider.model);
-        } catch {}
+        } catch (ftsErr) {
+          log.debug(`failed to delete stale memory FTS for ${stale.path}: ${String(ftsErr)}`);
+        }
       }
     }
   }
@@ -843,7 +849,9 @@ export abstract class MemoryManagerSyncOps {
             `DELETE FROM ${VECTOR_TABLE} WHERE id IN (SELECT id FROM chunks WHERE path = ? AND source = ?)`,
           )
           .run(stale.path, "sessions");
-      } catch {}
+      } catch (vecErr) {
+        log.debug(`failed to delete stale session vectors for ${stale.path}: ${String(vecErr)}`);
+      }
       this.db
         .prepare(`DELETE FROM chunks WHERE path = ? AND source = ?`)
         .run(stale.path, "sessions");
@@ -852,7 +860,9 @@ export abstract class MemoryManagerSyncOps {
           this.db
             .prepare(`DELETE FROM ${FTS_TABLE} WHERE path = ? AND source = ? AND model = ?`)
             .run(stale.path, "sessions", this.provider.model);
-        } catch {}
+        } catch (ftsErr) {
+          log.debug(`failed to delete stale session FTS for ${stale.path}: ${String(ftsErr)}`);
+        }
       }
     }
   }
@@ -1150,7 +1160,9 @@ export abstract class MemoryManagerSyncOps {
     } catch (err) {
       try {
         this.db.close();
-      } catch {}
+      } catch (closeErr) {
+        log.debug(`failed to close db during reindex recovery: ${String(closeErr)}`);
+      }
       await this.removeIndexFiles(tempDbPath);
       restoreOriginalState();
       throw err;
@@ -1210,7 +1222,9 @@ export abstract class MemoryManagerSyncOps {
     if (this.fts.enabled && this.fts.available) {
       try {
         this.db.exec(`DELETE FROM ${FTS_TABLE}`);
-      } catch {}
+      } catch (ftsErr) {
+        log.debug(`failed to clear FTS table during index reset: ${String(ftsErr)}`);
+      }
     }
     this.dropVectorTable();
     this.vector.dims = undefined;

@@ -91,7 +91,8 @@ class SkillBinsCache implements SkillBinsProvider {
       const bins = await this.fetch();
       this.bins = resolveSkillBinTrustEntries(bins, this.pathEnv);
       this.lastRefresh = Date.now();
-    } catch {
+    } catch (fetchErr) {
+      console.warn(`skill bin fetch failed: ${String(fetchErr)}`);
       if (!this.lastRefresh) {
         this.bins = [];
       }

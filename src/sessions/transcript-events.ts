@@ -22,8 +22,8 @@ export function emitSessionTranscriptUpdate(sessionFile: string): void {
   for (const listener of SESSION_TRANSCRIPT_LISTENERS) {
     try {
       listener(update);
-    } catch {
-      /* ignore */
+    } catch (err) {
+      console.warn(`session transcript listener threw: ${String(err)}`);
     }
   }
 }
