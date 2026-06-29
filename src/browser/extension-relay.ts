@@ -550,20 +550,16 @@ export async function ensureChromeExtensionRelayServer(opts: {
 
       // Handle CORS preflight requests from the browser extension.
       if (req.method === "OPTIONS") {
-        if (origin && !isChromeExtensionOrigin) {
+        if (!isChromeExtensionOrigin) {
           res.writeHead(403);
           res.end("Forbidden");
           return;
         }
-        const requestedHeaders = (getHeader(req, "access-control-request-headers") ?? "")
-          .split(",")
-          .map((header) => header.trim().toLowerCase())
-          .filter((header) => header.length > 0);
-        const allowedHeaders = new Set(["content-type", RELAY_AUTH_HEADER, ...requestedHeaders]);
+        const allowedHeaders = ["content-type", RELAY_AUTH_HEADER];
         res.writeHead(204, {
-          "Access-Control-Allow-Origin": origin ?? "*",
+          "Access-Control-Allow-Origin": origin,
           "Access-Control-Allow-Methods": "GET, PUT, POST, OPTIONS",
-          "Access-Control-Allow-Headers": Array.from(allowedHeaders).join(", "),
+          "Access-Control-Allow-Headers": allowedHeaders.join(", "),
           "Access-Control-Max-Age": "86400",
           Vary: "Origin, Access-Control-Request-Headers",
         });
