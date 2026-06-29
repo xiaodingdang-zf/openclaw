@@ -1,4 +1,5 @@
 import type { OpenClawConfig } from "openclaw/plugin-sdk/bluebubbles";
+import { truncateText } from "openclaw/plugin-sdk/bluebubbles";
 import { resolveBlueBubblesServerAccount } from "./account-resolve.js";
 import { blueBubblesFetchWithTimeout, buildBlueBubblesApiUrl } from "./types.js";
 
@@ -61,10 +62,7 @@ function clampHistoryLimit(limit: number): number {
 }
 
 function truncateHistoryBody(text: string): string {
-  if (text.length <= MAX_HISTORY_BODY_CHARS) {
-    return text;
-  }
-  return `${text.slice(0, MAX_HISTORY_BODY_CHARS).trimEnd()}...`;
+  return truncateText(text, MAX_HISTORY_BODY_CHARS, { suffix: "..." });
 }
 
 /**

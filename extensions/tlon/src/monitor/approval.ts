@@ -5,6 +5,7 @@
  * a notification and can approve or deny the request.
  */
 
+import { truncateText } from "openclaw/plugin-sdk/tlon";
 import type { PendingApproval } from "../settings.js";
 
 export type { PendingApproval };
@@ -52,14 +53,8 @@ export function createPendingApproval(params: CreateApprovalParams): PendingAppr
   };
 }
 
-/**
- * Truncate text to a maximum length with ellipsis.
- */
 function truncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return text.substring(0, maxLength - 3) + "...";
+  return truncateText(text, maxLength, { suffix: "..." });
 }
 
 /**

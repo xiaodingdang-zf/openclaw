@@ -38,6 +38,7 @@ import {
   resolveAvatarMime,
 } from "../shared/avatar-policy.js";
 import { normalizeSessionDeliveryFields } from "../utils/delivery-context.js";
+import { truncateText } from "../utils/truncate.js";
 import { readSessionTitleFieldsFromTranscript } from "./session-utils.fs.js";
 import type {
   GatewayAgentRow,
@@ -136,15 +137,7 @@ function formatSessionIdPrefix(sessionId: string, updatedAt?: number | null): st
 }
 
 function truncateTitle(text: string, maxLen: number): string {
-  if (text.length <= maxLen) {
-    return text;
-  }
-  const cut = text.slice(0, maxLen - 1);
-  const lastSpace = cut.lastIndexOf(" ");
-  if (lastSpace > maxLen * 0.6) {
-    return cut.slice(0, lastSpace) + "…";
-  }
-  return cut + "…";
+  return truncateText(text, maxLen, { wordBreak: true, trim: false });
 }
 
 export function deriveSessionTitle(

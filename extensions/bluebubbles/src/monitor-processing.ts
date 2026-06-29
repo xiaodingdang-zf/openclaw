@@ -1,4 +1,5 @@
 import type { OpenClawConfig } from "openclaw/plugin-sdk/bluebubbles";
+import { truncateText } from "openclaw/plugin-sdk/bluebubbles";
 import {
   DM_GROUP_ACCESS_REASON,
   createScopedPairingAccess,
@@ -309,10 +310,7 @@ function truncateHistoryBody(body: string, maxChars: number): string {
   if (!trimmed) {
     return "";
   }
-  if (trimmed.length <= maxChars) {
-    return trimmed;
-  }
-  return `${trimmed.slice(0, maxChars).trimEnd()}...`;
+  return truncateText(trimmed, maxChars, { suffix: "...", trim: false });
 }
 
 function mergeHistoryEntries(params: {

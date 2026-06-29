@@ -1,6 +1,7 @@
 import type { SlackActionMiddlewareArgs } from "@slack/bolt";
 import type { Block, KnownBlock } from "@slack/web-api";
 import { enqueueSystemEvent } from "../../../infra/system-events.js";
+import { truncateText } from "../../../utils/truncate.js";
 import { authorizeSlackSystemEventSender } from "../auth.js";
 import type { SlackMonitorContext } from "../context.js";
 import { escapeSlackMrkdwn } from "../mrkdwn.js";
@@ -57,11 +58,7 @@ function truncateInteractionString(
   value: string,
   max = SLACK_INTERACTION_STRING_MAX_CHARS,
 ): string {
-  const trimmed = value.trim();
-  if (trimmed.length <= max) {
-    return trimmed;
-  }
-  return `${trimmed.slice(0, max - 1)}…`;
+  return truncateText(value, max);
 }
 
 function sanitizeSlackInteractionPayloadValue(value: unknown, key?: string): unknown {

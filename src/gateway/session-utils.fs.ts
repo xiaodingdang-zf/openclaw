@@ -14,6 +14,7 @@ import { jsonUtf8Bytes } from "../infra/json-utf8-bytes.js";
 import { hasInterSessionUserProvenance } from "../sessions/input-provenance.js";
 import { stripInlineDirectiveTagsForDisplay } from "../utils/directive-tags.js";
 import { extractToolCallNames, hasToolCall } from "../utils/transcript-tools.js";
+import { truncateText } from "../utils/truncate.js";
 import { stripEnvelope } from "./chat-sanitize.js";
 import type { SessionPreviewItem } from "./session-utils.types.js";
 
@@ -562,13 +563,7 @@ function normalizeRole(role: string | undefined, isTool: boolean): SessionPrevie
 }
 
 function truncatePreviewText(text: string, maxChars: number): string {
-  if (maxChars <= 0 || text.length <= maxChars) {
-    return text;
-  }
-  if (maxChars <= 3) {
-    return text.slice(0, maxChars);
-  }
-  return `${text.slice(0, maxChars - 3)}...`;
+  return truncateText(text, maxChars, { suffix: "...", trim: false });
 }
 
 function extractPreviewText(message: TranscriptPreviewMessage): string | null {

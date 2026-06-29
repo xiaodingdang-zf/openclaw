@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { hasErrnoCode } from "../infra/errors.js";
+import { truncateText } from "../utils/truncate.js";
 import { isPathInside } from "./scan-paths.js";
 
 // ---------------------------------------------------------------------------
@@ -209,10 +210,7 @@ const SOURCE_RULES: SourceRule[] = [
 // ---------------------------------------------------------------------------
 
 function truncateEvidence(evidence: string, maxLen = 120): string {
-  if (evidence.length <= maxLen) {
-    return evidence;
-  }
-  return `${evidence.slice(0, maxLen)}…`;
+  return truncateText(evidence, maxLen);
 }
 
 export function scanSource(source: string, filePath: string): SkillScanFinding[] {

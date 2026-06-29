@@ -3,7 +3,7 @@
  */
 
 import type { Client } from "@larksuiteoapi/node-sdk";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/feishu";
+import { fetchWithSsrFGuard, truncateText } from "openclaw/plugin-sdk/feishu";
 import type { FeishuDomain } from "./types.js";
 
 type Credentials = { appId: string; appSecret: string; domain?: FeishuDomain };
@@ -93,7 +93,7 @@ function truncateSummary(text: string, max = 50): string {
     return "";
   }
   const clean = text.replace(/\n/g, " ").trim();
-  return clean.length <= max ? clean : clean.slice(0, max - 3) + "...";
+  return truncateText(clean, max, { suffix: "...", trim: false });
 }
 
 export function mergeStreamingText(
