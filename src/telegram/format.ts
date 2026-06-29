@@ -6,19 +6,12 @@ import {
   type MarkdownIR,
 } from "../markdown/ir.js";
 import { renderMarkdownWithMarkers } from "../markdown/render.js";
+import { escapeHtml, escapeHtmlAttr } from "../utils/escape-html.js";
 
 export type TelegramFormattedChunk = {
   html: string;
   text: string;
 };
-
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function escapeHtmlAttr(text: string): string {
-  return escapeHtml(text).replace(/"/g, "&quot;");
-}
 
 /**
  * File extensions that share TLDs and commonly appear in code/documentation.
