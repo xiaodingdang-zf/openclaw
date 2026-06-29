@@ -823,3 +823,7 @@ export type { ResolvedProviderAuth } from "../agents/model-auth.js";
 
 // Security utilities
 export { redactSensitiveText } from "../logging/redact.js";
+
+// Shared text utilities
+export { truncateText } from "../utils/truncate.js";
+export { escapeHtml, escapeHtmlAttr, escapeHtmlFull } from "../utils/escape-html.js";
