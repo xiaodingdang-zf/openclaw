@@ -603,8 +603,8 @@ async function sendInvokeResult(
 ) {
   try {
     await client.request("node.invoke.result", buildNodeInvokeResultParams(frame, result));
-  } catch {
-    // ignore: node invoke responses are best-effort
+  } catch (invokeErr) {
+    console.warn(`node invoke result delivery failed (best-effort): ${String(invokeErr)}`);
   }
 }
 
@@ -654,7 +654,7 @@ async function sendNodeEvent(client: GatewayClient, event: string, payload: unkn
       event,
       payloadJSON: payload ? JSON.stringify(payload) : null,
     });
-  } catch {
-    // ignore: node events are best-effort
+  } catch (eventErr) {
+    console.warn(`node event delivery failed (best-effort): ${String(eventErr)}`);
   }
 }

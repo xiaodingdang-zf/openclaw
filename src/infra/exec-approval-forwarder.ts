@@ -349,7 +349,11 @@ async function deliverToTargets(params: {
           cfg: params.cfg,
           accountId: target.accountId,
           ...(Number.isFinite(threadId) ? { messageThreadId: threadId } : {}),
-        }).catch(() => {});
+        }).catch((typingErr) => {
+          log.debug(
+            `exec approvals: typing indicator failed for ${target.to}: ${String(typingErr)}`,
+          );
+        });
       }
       await params.deliver({
         cfg: params.cfg,

@@ -894,6 +894,8 @@ export const registerTelegramNativeCommands = ({
       operation: "setMyCommands",
       runtime,
       fn: () => bot.api.setMyCommands([]),
-    }).catch(() => {});
+    }).catch((clearErr) => {
+      runtime.log?.(`failed to clear Telegram command menu: ${String(clearErr)}`);
+    });
   }
 };

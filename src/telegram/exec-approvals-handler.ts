@@ -331,7 +331,11 @@ export class TelegramExecApprovalHandler {
           token: this.opts.token,
           accountId: this.opts.accountId,
           ...(typeof target.threadId === "number" ? { messageThreadId: target.threadId } : {}),
-        }).catch(() => {});
+        }).catch((typingErr) => {
+          log.debug(
+            `exec approvals: typing indicator failed for ${target.to}: ${String(typingErr)}`,
+          );
+        });
 
         const result = await this.sendMessage(target.to, payload.text ?? "", {
           cfg: this.opts.cfg,

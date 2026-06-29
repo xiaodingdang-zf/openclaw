@@ -185,8 +185,8 @@ export function createSlackMonitorContext(params: {
         });
         return route.sessionKey;
       }
-    } catch {
-      // Fall through to legacy key derivation.
+    } catch (routeErr) {
+      logVerbose(`slack session key routing failed, using legacy derivation: ${String(routeErr)}`);
     }
 
     return resolveSessionKey(
@@ -223,7 +223,8 @@ export function createSlackMonitorContext(params: {
       const entry = { name, type, topic, purpose };
       channelCache.set(channelId, entry);
       return entry;
-    } catch {
+    } catch (channelErr) {
+      logVerbose(`slack channel info lookup failed for ${channelId}: ${String(channelErr)}`);
       return {};
     }
   };
@@ -243,7 +244,8 @@ export function createSlackMonitorContext(params: {
       const entry = { name };
       userCache.set(userId, entry);
       return entry;
-    } catch {
+    } catch (userErr) {
+      logVerbose(`slack user info lookup failed for ${userId}: ${String(userErr)}`);
       return {};
     }
   };
