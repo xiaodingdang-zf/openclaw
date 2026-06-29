@@ -9,6 +9,7 @@ import { resolveNativeCommandSessionTargets } from "../../channels/native-comman
 import { resolveNativeCommandsEnabled, resolveNativeSkillsEnabled } from "../../config/commands.js";
 import { danger, logVerbose } from "../../globals.js";
 import { chunkItems } from "../../utils/chunk-items.js";
+import { truncateText } from "../../utils/truncate.js";
 import type { ResolvedSlackAccount } from "../accounts.js";
 import { resolveSlackAllowListMatch, resolveSlackUserAllowed } from "./allow-list.js";
 import { resolveSlackEffectiveAllowFrom } from "./auth.js";
@@ -63,14 +64,7 @@ type EncodedMenuChoice = SlackExternalArgMenuChoice;
 const slackExternalArgMenuStore = createSlackExternalArgMenuStore();
 
 function truncatePlainText(value: string, max: number): string {
-  const trimmed = value.trim();
-  if (trimmed.length <= max) {
-    return trimmed;
-  }
-  if (max <= 1) {
-    return trimmed.slice(0, max);
-  }
-  return `${trimmed.slice(0, max - 1)}…`;
+  return truncateText(value, max);
 }
 
 function buildSlackArgMenuConfirm(params: { command: string; arg: string }) {

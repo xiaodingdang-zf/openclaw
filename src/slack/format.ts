@@ -1,12 +1,7 @@
 import type { MarkdownTableMode } from "../config/types.base.js";
 import { chunkMarkdownIR, markdownToIR, type MarkdownLinkSpan } from "../markdown/ir.js";
 import { renderMarkdownWithMarkers } from "../markdown/render.js";
-
-// Escape special characters for Slack mrkdwn format.
-// Preserve Slack's angle-bracket tokens so mentions and links stay intact.
-function escapeSlackMrkdwnSegment(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import { escapeHtml as escapeSlackMrkdwnSegment } from "../utils/escape-html.js";
 
 const SLACK_ANGLE_TOKEN_RE = /<[^>\n]+>/g;
 

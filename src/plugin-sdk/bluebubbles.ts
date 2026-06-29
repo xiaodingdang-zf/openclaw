@@ -111,3 +111,4 @@ export {
   resolveWebhookTargetWithAuthOrRejectSync,
   withResolvedWebhookRequestPipeline,
 } from "./webhook-targets.js";
+export { truncateText } from "../utils/truncate.js";

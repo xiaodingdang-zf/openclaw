@@ -1,3 +1,5 @@
+import { truncateText } from "../utils/truncate.js";
+
 export function formatDurationCompact(valueMs?: number) {
   if (!valueMs || !Number.isFinite(valueMs) || valueMs <= 0) {
     return "n/a";
@@ -34,10 +36,7 @@ export function formatTokenShort(value?: number) {
 }
 
 export function truncateLine(value: string, maxLength: number) {
-  if (value.length <= maxLength) {
-    return value;
-  }
-  return `${value.slice(0, maxLength).trimEnd()}...`;
+  return truncateText(value, maxLength, { suffix: "..." });
 }
 
 export type TokenUsageLike = {
